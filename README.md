@@ -4,7 +4,7 @@ Tested ESP32, other targets should be fine.
 
 ## Modbus service
 
-First, you need to define a class that handles the client's request:
+First, you need to define a class that inherits from ModbusDevice to handle client requests:
 ```
 class Device : ModbusDevice
 {
