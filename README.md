@@ -1,5 +1,5 @@
 # nanoFramework.Modbus
-Serial port modbus protocol implementation. 
+Serial port Modbus-RTU protocol implementation. 
 Tested ESP32, other targets should be fine.
 
 ## Modbus service
@@ -34,7 +34,7 @@ Configuration.SetPinFunction(17, DeviceFunction.COM2_TX);
 Configuration.SetPinFunction(18, DeviceFunction.COM2_RTS);
 ```
 
-Modbus RTU Server
+Start the service
 ```
 var server = new ModbusServer(new Device(1), "COM2");
 server.ReadTimeout = server.WriteTimeout = 2000;
@@ -50,7 +50,7 @@ Configuration.SetPinFunction(26, DeviceFunction.COM1_TX);
 Configuration.SetPinFunction(27, DeviceFunction.COM1_RTS);
 ```
 
-Client
+Declare the client
 ```
 var client = new ModbusClient("COM1");
 client.ReadTimeout = client.WriteTimeout = 2000;
