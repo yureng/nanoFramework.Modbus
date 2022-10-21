@@ -27,7 +27,7 @@ class Device : ModbusDevice
 }
 ```
 
-Define the serial port (COM2)
+Config the serial port (COM2)
 ```
 Configuration.SetPinFunction(16, DeviceFunction.COM2_RX);
 Configuration.SetPinFunction(17, DeviceFunction.COM2_TX);
@@ -43,7 +43,7 @@ server.StartListening();
 
 ## Modbus client
 
-Define the serial port (COM1)
+Config the serial port (COM1)
 ```
 Configuration.SetPinFunction(25, DeviceFunction.COM1_RX);
 Configuration.SetPinFunction(26, DeviceFunction.COM1_TX);
