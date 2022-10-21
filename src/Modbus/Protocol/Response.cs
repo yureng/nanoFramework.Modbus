@@ -36,7 +36,7 @@ namespace nF.Modbus.Protocol
 			var fn = (byte)Function;
 			if (ErrorCode != ErrorCode.NoError)
 			{
-				fn = (byte)(fn & Consts.ErrorMask);
+				fn = SetBit(fn, 8, true);	// 如果出错，将功能码最左边 Bit 设为 1
                 buffer.Set(1, fn);
                 buffer.Add((byte)ErrorCode);
 			}
@@ -136,5 +136,19 @@ namespace nF.Modbus.Protocol
                 }
 			}
 		}
-	}
+
+        /// <param name="data"></param>
+        /// <param name="index">From left to right: 8,7,6,5,4,3,2,1</param>
+        /// <param name="flag">true: 1 / false: 0</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        static byte SetBit(byte data, byte index, bool flag)
+        {
+            if (index > 8 || index < 1)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            int v = index < 2 ? index : (2 << (index - 2));
+            return flag ? (byte)(data | v) : (byte)(data & ~v);
+        }
+    }
 }
