@@ -24,7 +24,7 @@ namespace nF.Modbus.Demo
             Configuration.SetPinFunction(17, DeviceFunction.COM2_TX);
             Configuration.SetPinFunction(18, DeviceFunction.COM2_RTS);
 
-            // Modbus RTU Server
+            // Modbus Server
             var server = new ModbusServer(new Device(1), "COM2");
             server.ReadTimeout = server.WriteTimeout = 2000;
             server.StartListening();
