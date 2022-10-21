@@ -1,5 +1,6 @@
 # nanoFramework.Modbus
-Serial port modbus protocol implementation
+Serial port modbus protocol implementation. 
+Tested ESP32, other targets should be fine.
 
 ## Modbus service
 
