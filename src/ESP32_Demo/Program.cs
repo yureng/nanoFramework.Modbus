@@ -12,17 +12,17 @@ namespace nF.Modbus.Demo
     {
         public static void Main()
         {
-            Debug.WriteLine("Hello from nanoFramework!");
-
-            // SerialPort COM1
-            Configuration.SetPinFunction(25, DeviceFunction.COM1_RX);
-            Configuration.SetPinFunction(26, DeviceFunction.COM1_TX);
-            Configuration.SetPinFunction(27, DeviceFunction.COM1_RTS);
+            Debug.WriteLine("Hello from nanoFramework!");            
 
             // SerialPort COM2
             Configuration.SetPinFunction(16, DeviceFunction.COM2_RX);
             Configuration.SetPinFunction(17, DeviceFunction.COM2_TX);
             Configuration.SetPinFunction(18, DeviceFunction.COM2_RTS);
+
+            // SerialPort COM3
+            Configuration.SetPinFunction(25, DeviceFunction.COM3_RX);
+            Configuration.SetPinFunction(26, DeviceFunction.COM3_TX);
+            Configuration.SetPinFunction(27, DeviceFunction.COM3_RTS);
 
             // Modbus Server
             var server = new ModbusServer(new Device(1), "COM2");
@@ -30,7 +30,7 @@ namespace nF.Modbus.Demo
             server.StartListening();
 
             // Modbus Client
-            var client = new ModbusClient("COM1");
+            var client = new ModbusClient("COM3");
             client.ReadTimeout = client.WriteTimeout = 2000;
 
             client.WriteMultipleRegisters(2, 0x5, new ushort[] { 3, 5, 2, 3 });
