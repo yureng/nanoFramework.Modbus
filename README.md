@@ -2,6 +2,8 @@
 Serial port Modbus-RTU protocol implementation. 
 Tested ESP32, other targets should be fine.
 
+![Diagram](https://github.com/yureng/nanoFramework.Modbus/blob/main/src/ESP32_Demo/MAX485.png)
+
 ## Modbus service
 
 First, you need to define a class that inherits from ModbusDevice to handle client requests:
