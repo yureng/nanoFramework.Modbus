@@ -45,16 +45,16 @@ server.StartListening();
 
 ## Modbus client
 
-Config the serial port (COM1)
+Config the serial port (COM3)
 ```
-Configuration.SetPinFunction(25, DeviceFunction.COM1_RX);
-Configuration.SetPinFunction(26, DeviceFunction.COM1_TX);
-Configuration.SetPinFunction(27, DeviceFunction.COM1_RTS);
+Configuration.SetPinFunction(25, DeviceFunction.COM3_RX);
+Configuration.SetPinFunction(26, DeviceFunction.COM3_TX);
+Configuration.SetPinFunction(27, DeviceFunction.COM3_RTS);
 ```
 
 Declare the client
 ```
-var client = new ModbusClient("COM1");
+var client = new ModbusClient("COM3");
 client.ReadTimeout = client.WriteTimeout = 2000;
 ```
 
