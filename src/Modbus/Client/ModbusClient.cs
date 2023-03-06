@@ -22,10 +22,14 @@ namespace nF.Modbus.Client
         {
         }
 
+        public ModbusClient(SerialPort port) : base(port)
+        {
+        }
+
         #region Read methods
         public bool[] ReadDiscreteInputs(byte deviceId, ushort startAddress, ushort count)
         {
-            var data = ReadRaw(deviceId, startAddress, count, FunctionCode.ReadDiscreteInputs);
+            var data = Read(deviceId, startAddress, count, FunctionCode.ReadDiscreteInputs);
             if (data != null)
             {
                 var values = new bool[count];
@@ -50,7 +54,7 @@ namespace nF.Modbus.Client
 
         public ushort[] ReadInputRegisters(byte deviceId, ushort startAddress, ushort count)
         {
-            var data = ReadRaw(deviceId, startAddress, count, FunctionCode.ReadInputRegisters);
+            var data = Read(deviceId, startAddress, count, FunctionCode.ReadInputRegisters);
             if (data != null)
             {
                 var values = new ushort[count];
@@ -72,7 +76,7 @@ namespace nF.Modbus.Client
 
         public bool[] ReadCoils(byte deviceId, ushort startAddress, ushort count)
 		{
-            var data = ReadRaw(deviceId, startAddress, count, FunctionCode.ReadCoils);
+            var data = Read(deviceId, startAddress, count, FunctionCode.ReadCoils);
             if (data != null)
             {
                 var values = new bool[count];
@@ -98,7 +102,7 @@ namespace nF.Modbus.Client
 	
 		public ushort[] ReadHoldingRegisters(byte deviceId, ushort startAddress, ushort count)
 		{
-            var data = ReadRaw(deviceId, startAddress, count, FunctionCode.ReadHoldingRegisters);
+            var data = Read(deviceId, startAddress, count, FunctionCode.ReadHoldingRegisters);
             if (data != null)
             {
                 var values = new ushort[count];
@@ -118,7 +122,7 @@ namespace nF.Modbus.Client
                 return null;
 		}
 
-        public byte[] ReadRaw(byte deviceId, ushort startAddress, ushort count, FunctionCode function)
+        private byte[] Read(byte deviceId, ushort startAddress, ushort count, FunctionCode function)
         {
             if (function != FunctionCode.ReadCoils &&
                 function != FunctionCode.ReadDiscreteInputs &&
@@ -159,7 +163,7 @@ namespace nF.Modbus.Client
             var buffer = new DataBuffer(2);
             buffer.Set(0, (ushort)(value ? 0xFF00 : 0x0000));
 
-            return WriteRaw(deviceId, startAddress, 0, buffer, FunctionCode.WriteSingleCoil);
+            return Write(deviceId, startAddress, 0, buffer, FunctionCode.WriteSingleCoil);
         }
 
 		public bool WriteSingleRegister(byte deviceId, ushort startAddress, ushort value)
@@ -167,7 +171,7 @@ namespace nF.Modbus.Client
             var register = new HoldingRegister { Value = value };
             var buffer = new DataBuffer(new[] { register.HiByte, register.LoByte });
 
-            return WriteRaw(deviceId, startAddress, 0, buffer, FunctionCode.WriteSingleRegister);
+            return Write(deviceId, startAddress, 0, buffer, FunctionCode.WriteSingleRegister);
         }
 
 		public bool WriteMultipleCoils(byte deviceId, ushort startAddress, bool[] values)
@@ -190,7 +194,7 @@ namespace nF.Modbus.Client
             }
 
             var buffer = new DataBuffer(coilBytes);
-            return WriteRaw(deviceId, startAddress, (ushort)values.Length, buffer, FunctionCode.WriteMultipleCoils);
+            return Write(deviceId, startAddress, (ushort)values.Length, buffer, FunctionCode.WriteMultipleCoils);
         }
 
 		public bool WriteMultipleRegisters(byte deviceId, ushort startAddress, ushort[] values)
@@ -205,15 +209,10 @@ namespace nF.Modbus.Client
                 buffer.Set(i * 2 + 1, values[i]);
             }
 
-            return WriteRaw(deviceId, startAddress, (ushort)values.Length, buffer, FunctionCode.WriteMultipleRegisters);
+            return Write(deviceId, startAddress, (ushort)values.Length, buffer, FunctionCode.WriteMultipleRegisters);
         }
 
-        public bool WriteRaw(byte deviceId, ushort startAddress, ushort count, byte[] data, FunctionCode function)
-        {
-            return WriteRaw(deviceId, startAddress, count, new DataBuffer(data), function);
-        }
-
-        private bool WriteRaw(byte deviceId, ushort startAddress, ushort count, DataBuffer buffer, FunctionCode function)
+        private bool Write(byte deviceId, ushort startAddress, ushort count, DataBuffer buffer, FunctionCode function)
         {
             if (function != FunctionCode.WriteSingleCoil &&
                 function != FunctionCode.WriteSingleRegister &&
@@ -249,11 +248,30 @@ namespace nF.Modbus.Client
 
             return
                response.IsValid &&
-               request.DeviceId == deviceId &&
-               request.Function == function &&
-               request.Address == startAddress;
+               response.DeviceId == deviceId &&
+               response.Function == function &&
+               response.Address == startAddress;
         }
+        #endregion
 
+        #region Send Raw
+        public byte[] Raw(byte deviceId, FunctionCode function, byte[] data)
+        {
+            var request = new Request
+            {
+                DeviceId = deviceId,
+                Function = function,
+                Data = new DataBuffer(data)
+            };
+
+            var response = SendRequest(request);
+            ValidError(response);
+
+            if (response.IsValid)
+                return response.Data.Buffer;
+            else
+                return null;
+        }
         #endregion
 
         #region Private Methods

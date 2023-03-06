@@ -23,6 +23,15 @@ namespace nF.Modbus
             _serialPort.ReceivedBytesThreshold = ReceivedBytesThreshold;
         }
 
+        public Port(SerialPort port, int ReceivedBytesThreshold = 1)
+        {
+            _serialPort = port;
+            _serialPort.Mode = SerialMode.RS485;
+            
+            if (ReceivedBytesThreshold != 1)
+                _serialPort.ReceivedBytesThreshold = ReceivedBytesThreshold;
+        }
+
         public string PortName => _serialPort != null ? _serialPort.PortName : String.Empty;
         public bool IsOpen => _serialPort != null ? _serialPort.IsOpen : false;
         

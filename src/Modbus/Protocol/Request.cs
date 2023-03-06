@@ -11,7 +11,14 @@ namespace nF.Modbus.Protocol
 
 		public Request(byte[] bytes)
 		{
-			this.Deserialize(bytes);
+			try
+			{
+				this.Deserialize(bytes);
+			}
+			catch
+			{
+				IsValid = false;
+			}
 		}
 
 		public byte DeviceId { get; set; }
@@ -48,8 +55,10 @@ namespace nF.Modbus.Protocol
 						buffer.Add(Data.Buffer);
 					break;
 				default:
-					throw new NotImplementedException();
-			}
+                    if (Data != null && Data.Length > 0)
+                        buffer.Add(Data.Buffer);
+                    break;
+            }
 
 			byte[] crc = Checksum.CRC16(buffer.Buffer);
 			buffer.Add(crc);
@@ -97,8 +106,7 @@ namespace nF.Modbus.Protocol
                     Data = new DataBuffer(buffer.Get(4, buffer.Length - 6));
                     break;
                 default:
-                    //throw new NotImplementedException($"Unknown function code: {Function}");
-                    IsValid = false;
+                    Data = new DataBuffer(buffer.Get(2, buffer.Length - 4));
                     break;
             }
         }

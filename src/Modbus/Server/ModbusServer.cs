@@ -25,6 +25,11 @@ namespace nF.Modbus.Server
             _device = device;
         }
 
+        public ModbusServer(ModbusDevice device, SerialPort port) : base(port, 6)
+        {
+            _device = device;
+        }
+
         public void StartListening()
         {
             this.CheckOpen();

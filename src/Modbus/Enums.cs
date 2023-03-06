@@ -35,6 +35,11 @@ namespace nF.Modbus
         WriteSingleRegister = 0x06,
 
         /// <summary>
+        /// 诊断功能 Diagnostic (Fn 8).
+        /// </summary>
+        Diagnostics = 0x08,
+
+        /// <summary>
         /// 写​​多个​线圈 Writes multiple coils (Fn 15).
         /// </summary>
         WriteMultipleCoils = 0x0F,
