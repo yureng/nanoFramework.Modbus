@@ -64,7 +64,7 @@ var data1 = client.ReadHoldingRegisters(2, 0x7, 4);
 var data2 = client.ReadCoils(2, 0x23, 2);
 ```
 
-Write the address 0x5 0x6
+Write the address 0x5 or Diagnostics
 ```
 client.WriteMultipleRegisters(2, 0x5, new ushort[] { 3, 5, 2, 3 });
 client.Raw(2, FunctionCode.Diagnostics, new byte[] { 0x01, 0x01, 0x01, 0x01 });
