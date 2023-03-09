@@ -25,9 +25,10 @@ namespace nF.Modbus
 
         public Port(SerialPort port, int ReceivedBytesThreshold = 1)
         {
+            if (port.Mode != SerialMode.RS485)
+                throw new ArgumentException("port mode must be set to RS485", "port");
+
             _serialPort = port;
-            _serialPort.Mode = SerialMode.RS485;
-            
             if (ReceivedBytesThreshold != 1)
                 _serialPort.ReceivedBytesThreshold = ReceivedBytesThreshold;
         }
