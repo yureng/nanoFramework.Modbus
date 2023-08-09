@@ -1,3 +1,6 @@
+
+* [🌶️ nanoFramework.Modbus has been moved to the official nanoFramework driver library.](https://github.com/nanoframework/nanoFramework.IoT.Device/blob/develop/devices/Modbus/README.md)
+
 # nanoFramework.Modbus
 Serial port Modbus-RTU protocol implementation. 
 Tested ESP32, other targets should be fine.
